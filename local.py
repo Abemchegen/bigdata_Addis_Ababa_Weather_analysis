@@ -180,7 +180,7 @@ def create_visualizations(hourly_df, daily_df, results):
     print(" Saved: addis_climate_analysis.png")
     plt.show()
 
-# MAIN
+# MAIN FUNCTION
 
 def main():
     """Main function"""
