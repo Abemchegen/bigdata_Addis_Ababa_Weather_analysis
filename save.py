@@ -38,7 +38,7 @@ for year in range(1950, 2025):
 hourly_df = pd.concat(all_hourly)
 daily_df = pd.concat(all_daily)
 
-# Save to CSV (always works)
+# Save to CSV 
 hourly_df.to_csv('addis_weather_1950_2024_hourly.csv')
 daily_df.to_csv('addis_weather_1950_2024_daily.csv')
 
