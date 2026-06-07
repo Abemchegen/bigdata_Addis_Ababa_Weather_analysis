@@ -70,7 +70,7 @@ def analyze_data(hourly_df, daily_df):
     
     # Afternoon maximum temperature trend (2pm-4pm)
     hourly_df['hour'] = hourly_df.index.hour
-    afternoon_hours = hourly_df[(hourly_df['hour'] >= 13) & (hourly_df['hour'] <= 16)]
+    afternoon_hours = hourly_df[(hourly_df['hour'] >= 14) & (hourly_df['hour'] <= 16)]
     afternoon_daily_max = afternoon_hours.groupby(afternoon_hours.index.date)['temperature_2m'].max()
     afternoon_daily_max.index = pd.to_datetime(afternoon_daily_max.index)
     afternoon_yearly_max = afternoon_daily_max.groupby(afternoon_daily_max.index.year).mean()
@@ -122,9 +122,9 @@ def create_visualizations(hourly_df, daily_df, results):
     
     # 1. Temperature trend
     ax1 = axes[0, 0]
-    ax1.plot(results['yearly_temp'].index, results['yearly_temp'].values, 
-             'o-', linewidth=2, markersize=4, color='red', alpha=0.7)
-    ax1.set_title('Temperature Trend', fontweight='bold')
+    ax1.plot(results['yearly_temp'].index, results['yearly_temp'].values,
+             's-', linewidth=2, markersize=5, color='firebrick', alpha=0.8)
+    ax1.set_title('Annual Temperature Trend', fontweight='bold')
     ax1.set_ylabel('Temperature (°C)')
     ax1.set_xlabel('Year')
     ax1.grid(True, alpha=0.3)
@@ -132,7 +132,7 @@ def create_visualizations(hourly_df, daily_df, results):
              f'Change: {results["temp_change"]:+.2f}°C\nRate: {results["warming_rate"]:.2f}°C/decade',
              transform=ax1.transAxes,
              verticalalignment='top',
-             bbox=dict(facecolor='white', alpha=0.8, edgecolor='gray'))
+             bbox=dict(facecolor='white', alpha=0.85, edgecolor='gray', boxstyle='round,pad=0.4'))
     
     # 2. Rainfall trend
     ax2 = axes[0, 1]
@@ -177,7 +177,7 @@ def create_visualizations(hourly_df, daily_df, results):
                  fontsize=14, fontweight='bold')
     plt.tight_layout()
     plt.savefig('addis_climate_analysis.png', dpi=300, bbox_inches='tight')
-    print("Saved: addis_climate_analysis.png")
+    print(" Saved: addis_climate_analysis.png")
     plt.show()
 
 # MAIN
