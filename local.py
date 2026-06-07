@@ -10,9 +10,7 @@ import seaborn as sns
 import warnings
 warnings.filterwarnings('ignore')
 
-# ============================================
 # LOAD DATA FROM CSV FILES
-# ============================================
 
 def load_from_csv():
     """Load data directly from CSV files you already saved"""
@@ -48,9 +46,7 @@ def load_from_csv():
     
     return hourly_df, daily_df
 
-# ============================================
 # ANALYSIS
-# ============================================
 
 def analyze_data(hourly_df, daily_df):
     """Analyze the climate data"""
@@ -102,9 +98,7 @@ def analyze_data(hourly_df, daily_df):
     
     return results
 
-# ============================================
 # VISUALIZATIONS
-# ============================================
 
 def create_visualizations(hourly_df, daily_df, results):
     """Create visualizations from data"""
@@ -167,9 +161,7 @@ def create_visualizations(hourly_df, daily_df, results):
     print("📸 Saved: addis_climate_analysis.png")
     plt.show()
 
-# ============================================
 # MAIN
-# ============================================
 
 def main():
     """Main function - just load CSV and analyze"""
@@ -194,9 +186,8 @@ def main():
     print(" ANALYSIS COMPLETE!")
     print("="*60)
 
-# ============================================
+
 # RUN IT
-# ============================================
 
 if __name__ == "__main__":
     main()
