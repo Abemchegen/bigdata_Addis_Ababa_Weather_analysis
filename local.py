@@ -18,7 +18,7 @@ def load_from_csv():
     """Load data directly from CSV files you already saved"""
     
     print("="*60)
-    print("📂 LOADING DATA FROM CSV FILES")
+    print(" LOADING DATA FROM CSV FILES")
     print("="*60)
     
     # Your CSV files
@@ -33,17 +33,17 @@ def load_from_csv():
         return None, None
     
     # Load hourly data
-    print(f"\n📖 Loading {hourly_file}...")
+    print(f"\n Loading {hourly_file}...")
     hourly_df = pd.read_csv(hourly_file, index_col=0, parse_dates=True)
     print(f"   ✓ Loaded {len(hourly_df):,} hourly records")
     
     # Load daily data
-    print(f"📖 Loading {daily_file}...")
+    print(f" Loading {daily_file}...")
     daily_df = pd.read_csv(daily_file, index_col=0, parse_dates=True)
     print(f"   ✓ Loaded {len(daily_df):,} daily records")
     
     # Display info
-    print(f"\n📅 Date range: {hourly_df.index[0].date()} to {hourly_df.index[-1].date()}")
+    print(f"\n Date range: {hourly_df.index[0].date()} to {hourly_df.index[-1].date()}")
     print(f"   Total years: {hourly_df.index[-1].year - hourly_df.index[0].year + 1}")
     
     return hourly_df, daily_df
@@ -56,13 +56,13 @@ def analyze_data(hourly_df, daily_df):
     """Analyze the climate data"""
     
     print("\n" + "="*60)
-    print("📊 CLIMATE ANALYSIS")
+    print(" CLIMATE ANALYSIS")
     print("="*60)
     
     results = {}
     
     # Basic statistics
-    print("\n📍 CLIMATE STATISTICS:")
+    print("\n CLIMATE STATISTICS:")
     print("-" * 40)
     
     results['mean_temp'] = hourly_df['temperature_2m'].mean()
@@ -85,7 +85,7 @@ def analyze_data(hourly_df, daily_df):
     last_year = yearly_temp.index[-1]
     temp_change = yearly_temp.iloc[-1] - yearly_temp.iloc[0]
     
-    print(f"\n📈 TEMPERATURE TREND:")
+    print(f"\n TEMPERATURE TREND:")
     print(f"   {first_year}: {yearly_temp.iloc[0]:.1f}°C")
     print(f"   {last_year}: {yearly_temp.iloc[-1]:.1f}°C")
     print(f"   Change: {temp_change:+.2f}°C")
@@ -109,7 +109,7 @@ def analyze_data(hourly_df, daily_df):
 def create_visualizations(hourly_df, daily_df, results):
     """Create visualizations from data"""
     
-    print("\n🎨 Creating visualizations...")
+    print("\n Creating visualizations...")
     
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
     
@@ -175,7 +175,7 @@ def main():
     """Main function - just load CSV and analyze"""
     
     print("="*60)
-    print("🌍 ADDIS ABABA CLIMATE ANALYSIS")
+    print(" ADDIS ABABA CLIMATE ANALYSIS")
     print("="*60)
     
     # Load from CSV files
@@ -191,7 +191,7 @@ def main():
     create_visualizations(hourly_df, daily_df, results)
     
     print("\n" + "="*60)
-    print("✅ ANALYSIS COMPLETE!")
+    print(" ANALYSIS COMPLETE!")
     print("="*60)
 
 # ============================================
