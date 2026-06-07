@@ -124,11 +124,15 @@ def create_visualizations(hourly_df, daily_df, results):
     ax1 = axes[0, 0]
     ax1.plot(results['yearly_temp'].index, results['yearly_temp'].values, 
              'o-', linewidth=2, markersize=4, color='red', alpha=0.7)
-    ax1.set_title(f'Temperature Trend (Warming: {results["temp_change"]:+.1f}°C)', 
-                  fontweight='bold')
+    ax1.set_title('Temperature Trend', fontweight='bold')
     ax1.set_ylabel('Temperature (°C)')
     ax1.set_xlabel('Year')
     ax1.grid(True, alpha=0.3)
+    ax1.text(0.02, 0.95,
+             f'Change: {results["temp_change"]:+.2f}°C\nRate: {results["warming_rate"]:.2f}°C/decade',
+             transform=ax1.transAxes,
+             verticalalignment='top',
+             bbox=dict(facecolor='white', alpha=0.8, edgecolor='gray'))
     
     # 2. Rainfall trend
     ax2 = axes[0, 1]
