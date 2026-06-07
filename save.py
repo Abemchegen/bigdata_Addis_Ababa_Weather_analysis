@@ -1,9 +1,6 @@
-# save_data.py
 import pandas as pd
 
-# Since you just fetched it and it's in memory,
-# we need to re-fetch (but it will be fast with the cache)
-print("Re-fetching data to save...")
+print("fetching data to save...")
 
 import requests
 all_hourly = []
@@ -42,4 +39,4 @@ daily_df = pd.concat(all_daily)
 hourly_df.to_csv('addis_weather_1950_2024_hourly.csv')
 daily_df.to_csv('addis_weather_1950_2024_daily.csv')
 
-print(f"\n✅ Saved {len(hourly_df):,} records!")
+print(f"\n Saved {len(hourly_df):,} records!")
