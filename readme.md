@@ -102,3 +102,12 @@ python local.py
 ```
 
 This generates `addis_climate_analysis.png`.
+
+
+## Team Members
+1. Abem Tigist FTP0053/14 
+2. Betselot Tesfa FTP0327/14 
+3. Birhan Aklilu FTP0363/14 
+4. Edom Mulugeta FTP0503/14 
+5. Eyoel Tedla FTP0598/14 
+
