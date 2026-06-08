@@ -103,6 +103,21 @@ python local.py
 
 This generates `addis_climate_analysis.png`.
 
+## Contributing
+
+
+Contributions are welcome. To contribute:
+1. Fork the repository.
+2. Create a feature branch (`git checkout -b feature/your-feature`).
+3. Commit your changes (`git commit -m "Add your feature"`).
+4. Push to the branch (`git push origin feature/your-feature`).
+5. Open a Pull Request.
+
+
+Please ensure your code follows [PEP 8](https://peps.python.org/pep-0008/) style guidelines.
+
+
+---
 
 ## Team Members
 1. Abem Tigist FTP0053/14 
