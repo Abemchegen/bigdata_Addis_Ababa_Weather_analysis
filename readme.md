@@ -118,3 +118,11 @@ Please ensure your code follows [PEP 8](https://peps.python.org/pep-0008/) style
 
 
 ---
+
+## Team Members
+1. Abem Tigist FTP0053/14 
+2. Betselot Tesfa FTP0327/14 
+3. Birhan Aklilu FTP0363/14 
+4. Edom Mulugeta FTP0503/14 
+5. Eyoel Tedla FTP0598/14 
+

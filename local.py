@@ -1,8 +1,3 @@
-"""
-Addis Ababa Climate Analysis - LOAD FROM CSV FILES ONLY
-Simple and direct - no API calls
-"""
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,11 +8,8 @@ warnings.filterwarnings('ignore')
 # LOAD DATA FROM CSV FILES
 
 def load_from_csv():
-    """Load data directly from CSV files you already saved"""
-    
-    print("="*60)
-    print(" LOADING DATA FROM CSV FILES")
-    print("="*60)
+    """Load data directly from CSV files"""
+
     
     # Your CSV files
     hourly_file = 'addis_weather_1950_2024_hourly.csv'
@@ -26,23 +18,23 @@ def load_from_csv():
     # Check if files exist
     import os
     if not os.path.exists(hourly_file):
-        print(f"\n❌ ERROR: {hourly_file} not found!")
+        print(f"\n ERROR: {hourly_file} not found!")
         print("   Please make sure you saved the data first.")
         return None, None
     
     # Load hourly data
     print(f"\n Loading {hourly_file}...")
     hourly_df = pd.read_csv(hourly_file, index_col=0, parse_dates=True)
-    print(f"   ✓ Loaded {len(hourly_df):,} hourly records")
+    print(f"    Loaded {len(hourly_df):,} hourly records")
     
     # Load daily data
     print(f" Loading {daily_file}...")
     daily_df = pd.read_csv(daily_file, index_col=0, parse_dates=True)
-    print(f"   ✓ Loaded {len(daily_df):,} daily records")
+    print(f"   Loaded {len(daily_df):,} daily records")
     
     # Display info
     print(f"\n Date range: {hourly_df.index[0].date()} to {hourly_df.index[-1].date()}")
-    print(f"   Total years: {hourly_df.index[-1].year - hourly_df.index[0].year + 1}")
+    print(f"  Total years: {hourly_df.index[-1].year - hourly_df.index[0].year + 1}")
     
     return hourly_df, daily_df
 
@@ -76,6 +68,13 @@ def analyze_data(hourly_df, daily_df):
     yearly_temp = hourly_df.groupby('year')['temperature_2m'].mean()
     yearly_rain = daily_df.groupby(daily_df.index.year)['rain_sum'].sum()
     
+    # Afternoon maximum temperature trend (2pm-4pm)
+    hourly_df['hour'] = hourly_df.index.hour
+    afternoon_hours = hourly_df[(hourly_df['hour'] >= 14) & (hourly_df['hour'] <= 16)]
+    afternoon_daily_max = afternoon_hours.groupby(afternoon_hours.index.date)['temperature_2m'].max()
+    afternoon_daily_max.index = pd.to_datetime(afternoon_daily_max.index)
+    afternoon_yearly_max = afternoon_daily_max.groupby(afternoon_daily_max.index.year).mean()
+    
     # Temperature trend
     first_year = yearly_temp.index[0]
     last_year = yearly_temp.index[-1]
@@ -91,10 +90,24 @@ def analyze_data(hourly_df, daily_df):
     warming_per_decade = (temp_change / years_span) * 10
     print(f"   Warming rate: {warming_per_decade:.2f}°C per decade")
     
+    # Afternoon max temp trend
+    afternoon_first = afternoon_yearly_max.index[0]
+    afternoon_last = afternoon_yearly_max.index[-1]
+    afternoon_change = afternoon_yearly_max.iloc[-1] - afternoon_yearly_max.iloc[0]
+    afternoon_warming_per_decade = (afternoon_change / (afternoon_last - afternoon_first)) * 10
+    print(f"\n AFTERNOON MAX TEMPERATURE TREND (2pm-4pm):")
+    print(f"   {afternoon_first}: {afternoon_yearly_max.iloc[0]:.1f}°C")
+    print(f"   {afternoon_last}: {afternoon_yearly_max.iloc[-1]:.1f}°C")
+    print(f"   Change: {afternoon_change:+.2f}°C")
+    print(f"   Warming rate: {afternoon_warming_per_decade:.2f}°C per decade")
+    
     results['yearly_temp'] = yearly_temp
     results['yearly_rain'] = yearly_rain
     results['temp_change'] = temp_change
     results['warming_rate'] = warming_per_decade
+    results['afternoon_yearly_max'] = afternoon_yearly_max
+    results['afternoon_change'] = afternoon_change
+    results['afternoon_warming_rate'] = afternoon_warming_per_decade
     
     return results
 
@@ -109,13 +122,17 @@ def create_visualizations(hourly_df, daily_df, results):
     
     # 1. Temperature trend
     ax1 = axes[0, 0]
-    ax1.plot(results['yearly_temp'].index, results['yearly_temp'].values, 
-             'o-', linewidth=2, markersize=4, color='red', alpha=0.7)
-    ax1.set_title(f'Temperature Trend (Warming: {results["temp_change"]:+.1f}°C)', 
-                  fontweight='bold')
+    ax1.plot(results['yearly_temp'].index, results['yearly_temp'].values,
+             's-', linewidth=2, markersize=5, color='firebrick', alpha=0.8)
+    ax1.set_title('Annual Temperature Trend', fontweight='bold')
     ax1.set_ylabel('Temperature (°C)')
     ax1.set_xlabel('Year')
     ax1.grid(True, alpha=0.3)
+    ax1.text(0.02, 0.95,
+             f'Change: {results["temp_change"]:+.2f}°C\nRate: {results["warming_rate"]:.2f}°C/decade',
+             transform=ax1.transAxes,
+             verticalalignment='top',
+             bbox=dict(facecolor='white', alpha=0.85, edgecolor='gray', boxstyle='round,pad=0.4'))
     
     # 2. Rainfall trend
     ax2 = axes[0, 1]
@@ -141,30 +158,32 @@ def create_visualizations(hourly_df, daily_df, results):
     ax3.tick_params(axis='x', rotation=45)
     ax3.grid(True, alpha=0.3, axis='y')
     
-    # 4. Temperature distribution
+    # 4. Afternoon max temperature trend (2pm-4pm)
     ax4 = axes[1, 1]
-    ax4.hist(hourly_df['temperature_2m'], bins=40, color='skyblue', 
-             edgecolor='black', alpha=0.7)
-    ax4.axvline(results['mean_temp'], color='red', linewidth=2, 
-                label=f'Mean: {results["mean_temp"]:.1f}°C')
-    ax4.set_title(f'Temperature Distribution ({len(hourly_df):,} observations)', 
-                  fontweight='bold')
-    ax4.set_xlabel('Temperature (°C)')
-    ax4.set_ylabel('Frequency')
-    ax4.legend()
-    ax4.grid(True, alpha=0.3, axis='y')
-    
+    ax4.plot(results['afternoon_yearly_max'].index,
+             results['afternoon_yearly_max'].values,
+             's-', color='darkorange', linewidth=2, markersize=5, alpha=0.8)
+    ax4.set_title('Yearly Average 2pm-4pm Daily Max Temperature', fontweight='bold')
+    ax4.set_ylabel('Temperature (°C)')
+    ax4.set_xlabel('Year')
+    ax4.grid(True, alpha=0.3)
+    ax4.text(0.02, 0.95,
+             f'Change: {results["afternoon_change"]:+.2f}°C\nRate: {results["afternoon_warming_rate"]:.2f}°C/decade',
+             transform=ax4.transAxes,
+             verticalalignment='top',
+             bbox=dict(facecolor='white', alpha=0.8, edgecolor='gray'))
+
     plt.suptitle(f'Addis Ababa Climate Analysis ({hourly_df.index[0].year}-{hourly_df.index[-1].year})', 
                  fontsize=14, fontweight='bold')
     plt.tight_layout()
     plt.savefig('addis_climate_analysis.png', dpi=300, bbox_inches='tight')
-    print("📸 Saved: addis_climate_analysis.png")
+    print(" Saved: addis_climate_analysis.png")
     plt.show()
 
 # MAIN FUNCTION
 
 def main():
-    """Main function - just load CSV and analyze"""
+    """Main function"""
     
     print("="*60)
     print(" ADDIS ABABA CLIMATE ANALYSIS")
@@ -182,9 +201,7 @@ def main():
     # Visualize
     create_visualizations(hourly_df, daily_df, results)
     
-    print("\n" + "="*60)
-    print(" ANALYSIS COMPLETE!")
-    print("="*60)
+    
 
 
 # RUN IT
